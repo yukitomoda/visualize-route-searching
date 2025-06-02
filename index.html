@@ -21,6 +21,8 @@
                         <input type="button" v-on:click="next()" value="次のステップへ">
                         <input type="button" v-show="!autoEnabled" v-on:click="start()" value="自動実行開始">
                         <input type="button" v-show="autoEnabled" v-on:click="stop()" value="自動実行停止">
+                        <input type="button" v-on:click="regenerateMap" value="マップ再生成">
+                        <input type="button" v-on:click="resetSearchState" value="探索リセット">
                     </div>
                 </div>
                 <div class="control-group status-display">
@@ -43,6 +45,7 @@
                         <span v-show="searcher.state === 'searching'">探索中</span>
                         <span v-show="searcher.state === 'finished'">探索完了</span>
                     </div>
+                    <div>探索ステップ数: {{ stepsTaken }}</div>
                 </div>
             </div>
             <div id="svg-panel">
