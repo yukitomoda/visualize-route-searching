@@ -24,6 +24,9 @@
                     </div>
                 </div>
                 <div class="control-group status-display">
+                    <div>
+                        現在選択中のアルゴリズム： {{ selectedAlgorithm }}
+                    </div>
                     <div v-if="searcher.start && searcher.goal">
                         目的：
                         {{searcher.start.id}} → {{searcher.goal.id}}
