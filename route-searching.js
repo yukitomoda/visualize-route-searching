@@ -47,6 +47,72 @@ class Node {
     }
 }
 
+class AStarRouteSearcher {
+    constructor() {
+        this.state = 'instantiated';
+    }
+
+    init(start, goal) {
+        this.start = start;
+        this.goal = goal;
+        this.openList = [new Route(start)];
+        this.curRoute = this.openList[0];
+        this.state = 'init';
+    }
+
+    next() {
+        if (this.openList.length === 0) {
+            this.state = 'finished';
+            return;
+        }
+
+        this.state = 'searching';
+
+        // Sort openList by f-cost (g-cost + h-cost)
+        this.openList.sort((a, b) => {
+            const fCostA = a.cost + a.lastNode.getDistanceTo(this.goal);
+            const fCostB = b.cost + b.lastNode.getDistanceTo(this.goal);
+            return fCostA - fCostB;
+        });
+
+        // Select the route with the smallest f-cost
+        this.curRoute = this.openList.shift();
+
+        if (this.curRoute.lastNode === this.goal) {
+            this.state = 'finished';
+            return;
+        }
+
+        const lastNode = this.curRoute.lastNode;
+        const neighbors = lastNode.getConenctedNodes();
+
+        for (const neighbor of neighbors) {
+            if (this.curRoute.contains(neighbor)) {
+                continue; // Skip if neighbor is already in the current route (avoid cycles)
+            }
+
+            const newRoute = new Route(neighbor, this.curRoute);
+            this.openList.push(newRoute);
+        }
+
+        if (this.openList.length === 0) {
+            this.state = 'finished';
+        }
+    }
+
+    getNode() {
+        return this.curRoute.lastNode;
+    }
+
+    getCurrentRoute() {
+        return this.curRoute;
+    }
+
+    isFinished() {
+        return this.state === 'finished';
+    }
+}
+
 class Edge {
     /**
      * 
