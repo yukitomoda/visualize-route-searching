@@ -1,0 +1,131 @@
+/* Add your CSS styles here */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0; /* Basic reset */
+}
+
+#app { /* Vue app root */
+  padding: 20px; /* Add some padding around the whole app */
+}
+
+#main-container {
+  display: flex;
+  gap: 20px; /* Spacing between controls and SVG */
+}
+
+#controls-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Spacing between control groups */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 300px; /* Fixed width for the controls panel */
+}
+
+#svg-panel {
+  flex-grow: 1; /* Takes remaining space */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: flex; /* To help center SVG if it's smaller than panel */
+  align-items: center;
+  justify-content: center;
+  overflow: auto; /* In case SVG is larger than panel */
+}
+
+.control-group {
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+
+.algorithm-selection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.action-buttons > div {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.status-display div {
+  margin-bottom: 8px;
+  font-size: 0.9em;
+}
+
+.status-display div:last-child {
+  margin-bottom: 0;
+}
+
+input[type="button"] {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type="button"]:hover {
+  background-color: #0056b3;
+}
+
+/* SVG Styles */
+.svg-background {
+  fill: #CCCCCC;
+}
+
+svg g circle { /* Default for all circles */
+  fill: #888; /* Neutral grey for other nodes */
+  r: 10; /* Default radius */
+}
+
+.start-node { /* Specific override for start node */
+  fill: rgb(0, 255, 115);
+  r: 12; /* Overrides the r:10 from svg g circle */
+  stroke: darkblue;
+  stroke-width: 2px;
+}
+
+.goal-node { /* Specific override for goal node */
+  fill: rgb(255, 115, 0);
+  r: 12; /* Overrides the r:10 from svg g circle */
+  stroke: darkred;
+  stroke-width: 2px;
+}
+
+svg g text { /* General node text styling */
+  fill: white;
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-weight: bold;
+}
+
+svg > g > line { /* Edge lines */
+  stroke: #555;
+  stroke-width: 3px;
+}
+
+.edge-cost { /* Text for edge costs */
+  font-size: 9px;
+  fill: black; /* Ensure visibility over lines/background */
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+#best-route-polyline {
+  stroke: #FFD700; /* Gold */
+  stroke-width: 5px;
+  stroke-linecap: round;
+  fill: none;
+}
+
+#current-route-polyline {
+  stroke: #90EE90; /* LightGreen */
+  stroke-width: 3px;
+  stroke-dasharray: 5,5;
+  fill: none;
+}
