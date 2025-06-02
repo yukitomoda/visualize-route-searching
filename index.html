@@ -45,6 +45,7 @@
                         <span v-show="searcher.state === 'searching'">探索中</span>
                         <span v-show="searcher.state === 'finished'">探索完了</span>
                     </div>
+                    <div>探索ステップ数: {{ stepsTaken }}</div>
                 </div>
             </div>
             <div id="svg-panel">

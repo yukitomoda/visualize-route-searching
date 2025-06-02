@@ -180,7 +180,8 @@ const app = new Vue({
         edges: edges,
         searcher: new DFSRouteSearcher(),
         currentRoute: null,
-        bestRoute: null
+        bestRoute: null,
+        stepsTaken: 0 // New property
     },
     watch: {
         selectedAlgorithm(newAlgorithm) {
@@ -232,6 +233,7 @@ const app = new Vue({
     methods: {
         next() {
             if (this.searcher.isFinished()) return;
+            this.stepsTaken++; // Increment step count
             this.searcher.next();
             this.currentRoute = this.searcher.getCurrentRoute();
             if (this.currentRoute) {
@@ -260,6 +262,7 @@ const app = new Vue({
             this.edges = newMapData.edges;
             this.currentRoute = null;
             this.bestRoute = null;
+            this.stepsTaken = 0; // Reset step count
 
             // Ensure start and goal nodes are valid for the new map
             const startNode = this.nodes && this.nodes.length > 0 ? this.nodes[0] : null;
@@ -279,6 +282,7 @@ const app = new Vue({
 
             this.currentRoute = null;
             this.bestRoute = null;
+            this.stepsTaken = 0; // Reset step count
 
             if (this.searcher && this.searcher.start && this.searcher.goal) {
                 this.searcher.init(this.searcher.start, this.searcher.goal);
