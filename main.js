@@ -55,9 +55,8 @@ function generateRandomMap() {
             // Try to connect to right neighbor
             if (col < 5) {
                 const rightNeighbor = nodes[i + 1];
-                // Check if an edge already exists (from rightNeighbor to currentNode)
-                if (!rightNeighbor.edges.some(edge => edge.to === currentNode && edge.from === rightNeighbor) &&
-                    !currentNode.edges.some(edge => edge.to === rightNeighbor && edge.from === currentNode)) {
+                // Check if an edge already exists
+                if (!currentNode.isConnectedTo(rightNeighbor)) { // Simplified check
                     const edge = currentNode.addEdgeTo(rightNeighbor, currentNode.getDistanceTo(rightNeighbor));
                     edges.push(edge);
                     connected = true;
@@ -67,9 +66,8 @@ function generateRandomMap() {
             // If not connected, try to connect to down neighbor
             if (!connected && row < 5) {
                 const downNeighbor = nodes[i + 6];
-                 // Check if an edge already exists (from downNeighbor to currentNode)
-                if (!downNeighbor.edges.some(edge => edge.to === currentNode && edge.from === downNeighbor) &&
-                    !currentNode.edges.some(edge => edge.to === downNeighbor && edge.from === currentNode)) {
+                // Check if an edge already exists
+                if (!currentNode.isConnectedTo(downNeighbor)) { // Simplified check
                     const edge = currentNode.addEdgeTo(downNeighbor, currentNode.getDistanceTo(downNeighbor));
                     edges.push(edge);
                     connected = true;
@@ -81,8 +79,8 @@ function generateRandomMap() {
             // Avoid connecting to itself or if it's the very last node with no options.
             if (!connected && i < 35) {
                  const nextNode = nodes[i+1];
-                 if (!nextNode.edges.some(edge => edge.to === currentNode && edge.from === nextNode) &&
-                    !currentNode.edges.some(edge => edge.to === nextNode && edge.from === currentNode)) {
+                 // Check if an edge already exists
+                 if (!currentNode.isConnectedTo(nextNode)) { // Simplified check
                     const edge = currentNode.addEdgeTo(nextNode, currentNode.getDistanceTo(nextNode));
                     edges.push(edge);
                 }
@@ -272,6 +270,26 @@ const app = new Vue({
             } else {
                 // This case should ideally not be reached if generateRandomMap works correctly
                 console.error("Cannot initialize searcher: no nodes found after regenerating map.");
+            }
+        },
+        resetSearchState() {
+            if (this.autoEnabled) { // Stop auto-execution first
+                this.stop();
+            }
+
+            this.currentRoute = null;
+            this.bestRoute = null;
+
+            if (this.searcher && this.searcher.start && this.searcher.goal) {
+                this.searcher.init(this.searcher.start, this.searcher.goal);
+            } else if (this.searcher && this.nodes && this.nodes.length > 0) {
+                // Fallback if start/goal somehow lost, re-init with default nodes
+                console.warn("Searcher start/goal not found during reset, re-initializing with default nodes.");
+                const startNode = this.nodes[0];
+                const goalNode = this.nodes[this.nodes.length - 1];
+                this.searcher.init(startNode, goalNode);
+            } else {
+                console.error("Cannot reset search state: searcher or nodes not available.");
             }
         }
     }
